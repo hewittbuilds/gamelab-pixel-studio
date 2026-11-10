@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel Studio · Game Lab Drawing</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand"><span class="logo">▦</span><div><h1>Pixel Studio</h1><p>Draw a character. See the code.</p></div></div><span class="badge">MADE FOR GAME LAB · 400 × 400</span></header>
+<main>
+<aside class="panel tools"><h2>Your toolkit</h2><div class="segmented"><button id="paint" class="selected" aria-pressed="true">✎ Paint</button><button id="erase" aria-pressed="false">⌫ Erase</button></div>
+<label class="label" for="color">Paint color</label><div class="color-row"><input type="color" id="color" value="#ffbf36"><span id="colorValue">#FFBF36</span></div><div id="palette" class="palette" aria-label="Color palette"></div>
+<label class="label" for="size">Square size</label><select id="size"><option value="40">40 px · 10 × 10 grid</option><option value="20" selected>20 px · 20 × 20 grid</option><option value="10">10 px · 40 × 40 grid</option></select>
+<p class="hint">Smaller squares give you more detail. Changing size resamples your drawing.</p>
+<label class="check"><input type="checkbox" id="grid" checked> Show grid & coordinates</label>
+<div class="history"><button id="undo" disabled>↶ Undo</button><button id="redo" disabled>↷ Redo</button></div>
+<hr><h2>Try a starting point</h2><div class="examples"><button id="sun">☀ Sunshine</button><button id="crab">🦀 Crab</button></div><button id="clear" class="wide">Clear drawing</button>
+<hr><div class="history"><button id="save">Save drawing</button><button id="open">Open drawing</button></div><input type="file" id="file" accept="application/json,.json" hidden><p id="saveStatus" class="hint">Your drawing saves in this browser.</p></aside>
+<section class="panel workspace"><div class="section-head"><div><h2>The drawing board</h2><p>Click or drag to paint. Every square has a position.</p></div><span class="live-dot">LIVE</span></div>
+<div class="board"><div class="axis top"><span>0</span><span>100</span><span>200</span><span>300</span><span>400</span></div><div class="axis left"><span>0</span><span>100</span><span>200</span><span>300</span><span>400</span></div><canvas id="canvas" width="800" height="800" tabindex="0" aria-label="Pixel drawing canvas. Arrow keys move the selected square. Space paints. Delete erases."></canvas></div>
+<div class="board-footer"><code id="position">x 0 · y 0</code><span id="painted">0 painted squares</span></div><p class="hint keyboard">Keyboard drawing works too. Focus the board, use arrow keys, then Space to paint or Delete to erase.</p>
+<div class="lesson"><span>01</span><p><strong>Think like a programmer.</strong> The top-left corner is (0, 0). Move right to increase x. Move down to increase y.</p></div></section>
+<section class="panel code-panel"><div class="section-head"><div><h2>Your Game Lab code</h2><p>Updates as you draw.</p></div><span id="count" class="count">0 shapes</span></div>
+<label class="check"><input id="merge" type="checkbox"> Combine neighboring squares of the same color</label><label class="check"><input id="outlines" type="checkbox" checked> Smooth edges with noStroke()</label><label class="check"><input id="includeBg" type="checkbox"> Include a background</label><label class="bg-row">Background <input type="color" id="bg" value="#ffffff"></label>
+<textarea id="code" readonly spellcheck="false" aria-label="Generated Game Lab JavaScript"></textarea><div class="export"><button id="copy" class="primary">Copy code</button><button id="download">Download .js</button></div><p class="hint">In Game Lab, switch to text code and paste. Add this drawing after your sky or background. In an animated project, place it inside draw().</p></section>
+</main><div id="toast" role="status" aria-live="polite"></div><footer>A classroom drawing tool · Coordinates match the Game Lab canvas</footer><script type="module" src="app.js"></script>
+</body></html>
