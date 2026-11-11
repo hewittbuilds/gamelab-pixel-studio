@@ -10,8 +10,8 @@ Paint characters on a 400 × 400 coordinate grid and copy JavaScript into Code.o
 - Choose 5-, 10-, 20-, or 40-pixel squares.
 - Use the eraser, undo, and redo to revise your drawing.
 - Start with a sunshine or crab, or create your own character.
-- Copy the generated code or download a JavaScript file.
-- Save a drawing as JSON and open it later.
+- Use Copy code to paste into Game Lab, or Save code (.txt) to keep the commands in a text file.
+- Use Save drawing (.json) and Open drawing (.json) to keep editing your pixel art later.
 
 The code uses fill() and rect(). Smooth edges adds noStroke(), and can be switched off. Combining neighboring squares reduces the number of rectangle commands.
 

@@ -177,7 +177,7 @@ function download(filename, content, type) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 $('save').onclick = () => download('my-pixel-drawing.json', JSON.stringify(snapshot()), 'application/json');
-$('download').onclick = () => download('my-gamelab-drawing.js', $('code').value, 'text/javascript');
+$('download').onclick = () => download('my-gamelab-drawing.txt', $('code').value, 'text/plain');
 $('open').onclick = () => $('file').click();
 $('file').onchange = async event => {
   const file = event.target.files[0];
