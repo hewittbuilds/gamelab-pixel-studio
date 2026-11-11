@@ -34,7 +34,7 @@ export function generateCode(cells, size, options) {
 }
 
 export function validateDrawing(value) {
-  if (!value || ![10, 20, 40].includes(value.size) || !Array.isArray(value.cells) ||
+  if (!value || ![5, 10, 20, 40].includes(value.size) || !Array.isArray(value.cells) ||
       value.cells.length !== Math.pow(400 / value.size, 2) ||
       !value.cells.every(color => color === null || /^#[0-9a-f]{6}$/i.test(color))) {
     throw new Error('Choose a Pixel Studio drawing file.');

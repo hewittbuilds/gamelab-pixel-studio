@@ -7,7 +7,7 @@ Paint characters on a 400 × 400 coordinate grid and copy JavaScript into Code.o
 ## Using the app
 
 - Pick a color and click or drag on the grid to paint.
-- Choose 10-, 20-, or 40-pixel squares.
+- Choose 5-, 10-, 20-, or 40-pixel squares.
 - Use the eraser, undo, and redo to revise your drawing.
 - Start with a sunshine or crab, or create your own character.
 - Copy the generated code or download a JavaScript file.
@@ -29,3 +29,7 @@ Focus the canvas. Arrow keys move the selected square, Space paints, and Delete 
 
 This is a static HTML, CSS, and JavaScript app with no build step. GitHub Pages serves the main branch from the repository root. To run locally, serve this folder with a local HTTP server and open its URL.
 
+
+## Importing images
+
+Use Import image to turn a PNG, JPEG, or WebP photo, logo, drawing, or meme into editable pixel art. Preview the result with 4, 8, 16, or original colors. Crop and zoom to fill the square, or fit the whole image. Transparent areas stay empty. Apply replaces your drawing and can be undone. Images are processed on your device. Maximum image size is 15 MB and 30 megapixels.

@@ -1,9 +1,11 @@
 import {generateCode, validateDrawing} from './core.js';
+import {pixelColors, cropRectangle} from './image-import.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('canvas');
 const ctx = canvas.getContext('2d');
 const key = 'gamelab-pixel-studio-v1';
+$('size').add(new Option('5 px · 80 × 80 grid', '5'));
 let size = 20;
 let cells = Array(400).fill(null);
 let tool = 'paint';
@@ -66,6 +68,7 @@ function refresh() {
   $('code').value = result.code;
   $('count').textContent = result.count + ' shapes';
   $('painted').textContent = cells.filter(Boolean).length + ' painted squares';
+  $('position').textContent = 'x ' + selectedCell[0] * size + ' · y ' + selectedCell[1] * size;
   $('undo').disabled = !undo.length;
   $('redo').disabled = !redo.length;
   try { localStorage.setItem(key, JSON.stringify(snapshot())); }
@@ -191,3 +194,87 @@ $('copy').onclick = async () => {
 };
 setColor(color);
 refresh();
+
+let importSource = null;
+let importCells = null;
+let imageRequest = 0;
+const imageDialog = $('imageDialog');
+$('importImage').onclick = () => $('imageFile').click();
+$('imageFile').onchange = async event => {
+  const file = event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  const request = ++imageRequest;
+  let url;
+  try {
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+      throw new Error('Choose a PNG, JPEG, or WebP image.');
+    }
+    if (file.size > 15 * 1024 * 1024) throw new Error('Choose an image smaller than 15 MB.');
+    url = URL.createObjectURL(file);
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    if (request !== imageRequest) return;
+    if (image.naturalWidth * image.naturalHeight > 30000000) {
+      throw new Error('Choose an image smaller than 30 megapixels.');
+    }
+    importSource = image;
+    $('imageName').textContent = file.name;
+    $('imageZoom').value = '1'; $('imageX').value = '50'; $('imageY').value = '50';
+    $('imageFit').value = 'crop';
+    updateImagePreview();
+    imageDialog.showModal();
+  } catch (error) {
+    toast(error.message.startsWith('Choose') ? error.message : 'This image could not be opened. Try another PNG, JPEG, or WebP.');
+  } finally { if (url) URL.revokeObjectURL(url); }
+};
+
+function updateImagePreview() {
+  if (!importSource) return;
+  const nextSize = Number($('imageSize').value);
+  const width = 400 / nextSize;
+  const sample = document.createElement('canvas');
+  sample.width = width; sample.height = width;
+  const sampleContext = sample.getContext('2d', {willReadFrequently: true});
+  sampleContext.imageSmoothingEnabled = true;
+  sampleContext.imageSmoothingQuality = 'high';
+  const crop = $('imageFit').value === 'crop';
+  for (const id of ['imageZoom', 'imageX', 'imageY']) $(id).disabled = !crop;
+  const sourceWidth = importSource.naturalWidth;
+  const sourceHeight = importSource.naturalHeight;
+  if (crop) {
+    const area = cropRectangle(sourceWidth, sourceHeight, Number($('imageZoom').value), Number($('imageX').value), Number($('imageY').value));
+    sampleContext.drawImage(importSource, area.x, area.y, area.side, area.side, 0, 0, width, width);
+  } else {
+    const scale = width / Math.max(sourceWidth, sourceHeight);
+    const w = sourceWidth * scale;
+    const h = sourceHeight * scale;
+    sampleContext.drawImage(importSource, (width - w) / 2, (width - h) / 2, w, h);
+  }
+  importCells = pixelColors(sampleContext.getImageData(0, 0, width, width).data, Number($('imageColors').value));
+  const preview = $('imagePreview').getContext('2d');
+  for (let y = 0; y < 400; y += 10) {
+    for (let x = 0; x < 400; x += 10) {
+      preview.fillStyle = (x / 10 + y / 10) % 2 ? '#edf0e8' : '#ffffff';
+      preview.fillRect(x, y, 10, 10);
+    }
+  }
+  importCells.forEach((paint, index) => {
+    if (!paint) return;
+    preview.fillStyle = paint;
+    preview.fillRect(index % width * nextSize, Math.floor(index / width) * nextSize, nextSize, nextSize);
+  });
+  const painted = importCells.filter(Boolean);
+  $('importCount').textContent = painted.length + ' painted squares · ' + new Set(painted).size + ' colors. Combining squares can shorten the exported code.';
+}
+for (const id of ['imageSize', 'imageColors', 'imageFit', 'imageZoom', 'imageX', 'imageY']) $(id).oninput = updateImagePreview;
+$('cancelImport').onclick = () => imageDialog.close();
+imageDialog.onclose = () => { importSource = null; importCells = null; };
+$('applyImport').onclick = () => {
+  if (!importCells) return;
+  remember();
+  restore({size: Number($('imageSize').value), cells: [...importCells]});
+  imageDialog.close();
+  toast('Pixel art added. Paint to edit it, or copy your Game Lab code.');
+};

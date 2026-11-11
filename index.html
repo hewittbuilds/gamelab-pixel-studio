@@ -7,6 +7,20 @@
 </head>
 <body>
 <header><div class="brand"><span class="logo">▦</span><div><h1>Pixel Studio</h1><p>Draw a character. See the code.</p></div></div><span class="badge">MADE FOR GAME LAB · 400 × 400</span></header>
+<div class="import-banner"><p><strong>Start with an image.</strong> Turn a photo, logo, or meme into editable pixel art.</p><button class="primary" id="importImage">Import image</button></div>
+<input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden>
+<dialog id="imageDialog" aria-labelledby="importTitle">
+<div class="section-head"><div><h2 id="importTitle">Make it pixel art</h2><p id="imageName">Preview your image before adding it.</p></div><button id="cancelImport" aria-label="Close image import">Close</button></div>
+<div class="import-layout"><div><canvas id="imagePreview" width="400" height="400" aria-label="Pixelated image preview"></canvas><p class="hint">Transparent areas stay empty. Small text needs a finer grid.</p></div><div class="import-controls">
+<label class="label" for="imageSize">Pixel size</label><select id="imageSize"><option value="40">40 px · 10 × 10 squares</option><option value="20">20 px · 20 × 20 squares</option><option value="10" selected>10 px · 40 × 40 squares</option><option value="5">5 px · 80 × 80 squares</option></select>
+<label class="label" for="imageColors">Color palette</label><select id="imageColors"><option value="4">4 colors</option><option value="8">8 colors</option><option value="16" selected>16 colors</option><option value="0">Original colors</option></select>
+<label class="label" for="imageFit">Image framing</label><select id="imageFit"><option value="crop">Crop to fill the square</option><option value="fit">Fit the whole image</option></select>
+<label class="label" for="imageZoom">Zoom</label><input type="range" id="imageZoom" min="1" max="3" step="0.05" value="1">
+<label class="label" for="imageX">Horizontal crop position</label><input type="range" id="imageX" min="0" max="100" value="50">
+<label class="label" for="imageY">Vertical crop position</label><input type="range" id="imageY" min="0" max="100" value="50">
+<p id="importCount" class="hint"></p><p class="hint">Apply replaces the current drawing. Undo brings it back. Your image is processed on this device.</p>
+<button id="applyImport" class="primary wide">Use this pixel art</button></div></div>
+</dialog>
 <main>
 <aside class="panel tools"><h2>Your toolkit</h2><div class="segmented"><button id="paint" class="selected" aria-pressed="true">✎ Paint</button><button id="erase" aria-pressed="false">⌫ Erase</button></div>
 <label class="label" for="color">Paint color</label><div class="color-row"><input type="color" id="color" value="#ffbf36"><span id="colorValue">#FFBF36</span></div><div id="palette" class="palette" aria-label="Color palette"></div>
